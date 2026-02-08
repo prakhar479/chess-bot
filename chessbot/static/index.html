@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chess Bot Platform</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Chess Bot Platform</h1>
+      <p>Register bots, run tournaments, and replay matches.</p>
+    </header>
+    <main>
+      <section>
+        <h2>Registered Bots</h2>
+        <div id="bot-list"></div>
+      </section>
+      <section>
+        <h2>Run Quick Match</h2>
+        <div class="grid">
+          <label>
+            White Bot
+            <select id="white-select"></select>
+          </label>
+          <label>
+            Black Bot
+            <select id="black-select"></select>
+          </label>
+        </div>
+        <button id="run-match">Run Match</button>
+        <div id="match-result"></div>
+      </section>
+      <section>
+        <h2>Leaderboard</h2>
+        <div id="leaderboard"></div>
+      </section>
+    </main>
+    <script src="/static/js/app.js"></script>
+  </body>
+</html>
