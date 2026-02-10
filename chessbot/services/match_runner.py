@@ -69,7 +69,7 @@ def run_match(white: BotConfig, black: BotConfig, config: MatchConfig) -> MatchR
             input_text=f"{fen}\n",
             timeout_s=config.move_timeout_s,
         )
-        record_timing(\"bot_move\", time.monotonic() - move_start, bot=bot.name)
+        record_timing("bot_move", time.monotonic() - move_start, bot=bot.name)
 
         if sandbox_result.timed_out:
             winner = black.name if board.turn == chess.WHITE else white.name
