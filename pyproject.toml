@@ -1,0 +1,29 @@
+[project]
+name = "chess-bot-platform"
+version = "0.1.0"
+description = "Chess bot competition platform with tournaments, sandboxed bot execution, and web UI."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{name = "Chess Bot Platform"}]
+license = {text = "MIT"}
+
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn>=0.30.0",
+  "python-chess>=1.999",
+  "pydantic>=2.8.0",
+  "jinja2>=3.1.4",
+]
+
+[project.optional-dependencies]
+ci = [
+  "pytest>=8.2.0",
+  "httpx>=0.27.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["chessbot/tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
