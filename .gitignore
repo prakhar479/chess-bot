@@ -1,0 +1,4 @@
+.venv/
+chess_bot_platform.egg-info/
+
+__pycache__/

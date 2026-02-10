@@ -3,25 +3,161 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Match Viewer</title>
+    <title>Match Viewer - Chess Bot Platform</title>
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
     <header>
-      <h1>Match Viewer</h1>
-      <p id="match-title">Loading...</p>
+      <div class="header-content">
+        <h1>⚔ Match Viewer</h1>
+        <p id="match-title">Loading...</p>
+      </div>
+      <div class="header-controls">
+        <a href="/" class="btn btn-outline">← Dashboard</a>
+        <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">🌙</button>
+      </div>
     </header>
+
     <main>
+      <!-- Match Info -->
       <section>
-        <div id="board" class="board"></div>
-        <button id="prev">Previous</button>
-        <button id="next">Next</button>
+        <div class="grid-2">
+          <div>
+            <h2 id="match-header">White vs Black</h2>
+            <div class="flex gap-md" style="margin-top: var(--spacing-md); flex-wrap: wrap;">
+              <div>
+                <div class="text-muted text-small">White Bot</div>
+                <div id="white-bot-name" style="font-weight: 700; font-size: 16px;">—</div>
+              </div>
+              <div style="text-align: center;">
+                <div class="text-muted text-small">Result</div>
+                <div id="match-result" style="font-weight: 700; font-size: 18px;">—</div>
+              </div>
+              <div style="text-align: right;">
+                <div class="text-muted text-small">Black Bot</div>
+                <div id="black-bot-name" style="font-weight: 700; font-size: 16px;">—</div>
+              </div>
+            </div>
+          </div>
+          <div style="padding: var(--spacing-lg); background: var(--bg-secondary); border-radius: var(--radius-lg);">
+            <div class="flex-between mb-md">
+              <span class="text-muted">Duration</span>
+              <strong id="match-duration">—</strong>
+            </div>
+            <div class="flex-between mb-md">
+              <span class="text-muted">Total Moves</span>
+              <strong id="match-moves-count">0</strong>
+            </div>
+            <div class="flex-between mb-md">
+              <span class="text-muted">Move Timeout</span>
+              <strong id="match-timeout">—</strong>
+            </div>
+            <div class="flex-between">
+              <span class="text-muted">Created</span>
+              <strong id="match-created" style="font-size: 12px;">—</strong>
+            </div>
+          </div>
+        </div>
       </section>
+
+      <!-- Main Content -->
+      <div class="grid-2">
+        <!-- Board -->
+        <section>
+          <h2>Board</h2>
+          <div style="text-align: center;">
+            <div id="board" class="board"></div>
+            <div style="margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-md); justify-content: center;">
+              <button id="move-first" class="btn btn-small btn-outline">⏮ First</button>
+              <button id="move-prev" class="btn btn-small btn-outline">◀ Previous</button>
+              <span id="move-counter" style="padding: var(--spacing-sm) var(--spacing-md); text-align: center; min-width: 80px; color: var(--text-secondary);">Move 0</span>
+              <button id="move-next" class="btn btn-small btn-outline">Next ▶</button>
+              <button id="move-last" class="btn btn-small btn-outline">Last ⏭</button>
+            </div>
+            
+            <div style="margin-top: var(--spacing-lg);">
+              <input type="range" id="move-slider" min="0" max="0" value="0" style="width: 100%; cursor: pointer;">
+            </div>
+          </div>
+        </section>
+
+        <!-- Moves & Info -->
+        <section>
+          <div style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-lg); border-bottom: 2px solid var(--border-color);">
+            <button class="tabs-btn active" data-panel="moves" style="padding: var(--spacing-md); background: none; border: none; color: var(--text-secondary); cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">
+              Moves
+            </button>
+            <button class="tabs-btn" data-panel="pgn" style="padding: var(--spacing-md); background: none; border: none; color: var(--text-secondary); cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">
+              PGN
+            </button>
+            <button class="tabs-btn" data-panel="fen" style="padding: var(--spacing-md); background: none; border: none; color: var(--text-secondary); cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">
+              FEN History
+            </button>
+          </div>
+
+          <!-- Moves Panel -->
+          <div id="moves-panel" class="tab-panel active">
+            <ol id="move-list" style="list-style-position: inside; overflow-y: auto; max-height: 400px;">
+            </ol>
+          </div>
+
+          <!-- PGN Panel -->
+          <div id="pgn-panel" class="tab-panel" style="display: none;">
+            <textarea id="pgn-text" readonly style="font-family: monospace; font-size: 12px; max-height: 400px;">Loading...</textarea>
+          </div>
+
+          <!-- FEN Panel -->
+          <div id="fen-panel" class="tab-panel" style="display: none;">
+            <div id="fen-history" style="overflow-y: auto; max-height: 400px;">
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Analysis Section -->
       <section>
-        <h2>Moves</h2>
-        <ol id="move-list"></ol>
+        <h2>📊 Game Analysis</h2>
+        <div class="grid-2">
+          <div style="padding: var(--spacing-lg); background: var(--bg-secondary); border-radius: var(--radius-lg);">
+            <h3>White Stats</h3>
+            <div id="white-stats" style="margin-top: var(--spacing-md);">
+              <div class="flex-between mb-md">
+                <span>Total Moves:</span>
+                <strong id="white-move-count">—</strong>
+              </div>
+              <div class="flex-between mb-md">
+                <span>Avg Response Time:</span>
+                <strong id="white-avg-time">—</strong>
+              </div>
+            </div>
+          </div>
+          <div style="padding: var(--spacing-lg); background: var(--bg-secondary); border-radius: var(--radius-lg);">
+            <h3>Black Stats</h3>
+            <div id="black-stats" style="margin-top: var(--spacing-md);">
+              <div class="flex-between mb-md">
+                <span>Total Moves:</span>
+                <strong id="black-move-count">—</strong>
+              </div>
+              <div class="flex-between mb-md">
+                <span>Avg Response Time:</span>
+                <strong id="black-avg-time">—</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Actions -->
+      <section>
+        <div class="flex gap-md" style="flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="downloadPGN()">⬇ Download PGN</button>
+          <button class="btn btn-outline" onclick="shareMatch()">📤 Share Match</button>
+          <a href="/" class="btn btn-outline">← Back to Dashboard</a>
+        </div>
       </section>
     </main>
+
+    <script src="/static/js/utils.js"></script>
     <script src="/static/js/match.js"></script>
   </body>
 </html>

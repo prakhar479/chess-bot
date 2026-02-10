@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tournament Details - Chess Bot Platform</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <h1>🏆 Tournament Details</h1>
+        <p id="tournament-title">Loading...</p>
+      </div>
+      <div class="header-controls">
+        <a href="/" class="btn btn-outline">← Dashboard</a>
+        <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">🌙</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Tournament Info -->
+      <section>
+        <div class="grid-2">
+          <div>
+            <h2 id="tournament-name"></h2>
+            <div style="margin-top: var(--spacing-md);">
+              <div class="mb-md">
+                <div class="text-muted text-small">Number of Bots</div>
+                <div style="font-weight: 700; font-size: 18px;" id="tournament-bot-count">—</div>
+              </div>
+              <div class="mb-md">
+                <div class="text-muted text-small">Rounds</div>
+                <div style="font-weight: 700; font-size: 18px;" id="tournament-rounds">—</div>
+              </div>
+              <div>
+                <div class="text-muted text-small">Created</div>
+                <div style="font-weight: 700; font-size: 14px;" id="tournament-created">—</div>
+              </div>
+            </div>
+          </div>
+          <div style="padding: var(--spacing-lg); background: var(--bg-secondary); border-radius: var(--radius-lg);">
+            <h3>Settings</h3>
+            <div class="flex-between mb-md mt-md">
+              <span>Move Timeout</span>
+              <strong id="tournament-timeout">—</strong>
+            </div>
+            <div class="flex-between mb-md">
+              <span>Max Moves</span>
+              <strong id="tournament-max-moves">—</strong>
+            </div>
+            <div class="flex-between">
+              <span>Total Matches</span>
+              <strong id="tournament-total-matches">—</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="standings">🏅 Standings</button>
+        <button class="tab-btn" data-tab="matches">⚔ Matches</button>
+        <button class="tab-btn" data-tab="participants">🤖 Participants</button>
+      </div>
+
+      <!-- Standings Tab -->
+      <div id="standings-tab" class="tab-content active">
+        <section>
+          <h2>Final Standings</h2>
+          <div style="overflow-x: auto;">
+            <table id="tournament-standings">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">Rank</th>
+                  <th>Bot</th>
+                  <th style="text-align: center;">Wins</th>
+                  <th style="text-align: center;">Losses</th>
+                  <th style="text-align: center;">Draws</th>
+                  <th style="text-align: center;">Points</th>
+                  <th style="text-align: center;">Win Rate</th>
+                </tr>
+              </thead>
+              <tbody id="standings-body">
+                <tr class="text-center">
+                  <td colspan="7">Loading standings...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- Matches Tab -->
+      <div id="matches-tab" class="tab-content">
+        <section>
+          <h2>Tournament Matches</h2>
+          <div id="tournament-matches" class="grid-2">
+            <div class="text-center" style="grid-column: 1/-1;">Loading matches...</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Participants Tab -->
+      <div id="participants-tab" class="tab-content">
+        <section>
+          <h2>Tournament Participants</h2>
+          <div id="tournament-participants" class="grid-2">
+            <div class="text-center" style="grid-column: 1/-1;">Loading participants...</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Actions -->
+      <section>
+        <div class="flex gap-md" style="flex-wrap: wrap;">
+          <button class="btn btn-outline" onclick="exportTournamentData()">📤 Export Data</button>
+          <a href="/" class="btn btn-outline">← Back to Dashboard</a>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/tournament.js"></script>
+  </body>
+</html>

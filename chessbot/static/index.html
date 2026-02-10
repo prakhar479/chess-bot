@@ -3,39 +3,256 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chess Bot Platform</title>
+    <title>Chess Bot Competition Platform</title>
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
     <header>
-      <h1>Chess Bot Platform</h1>
-      <p>Register bots, run tournaments, and replay matches.</p>
+      <div class="header-content">
+        <h1>♟ Chess Bot Platform</h1>
+        <p>Premium chess bot tournaments & leaderboards</p>
+      </div>
+      <div class="header-controls">
+        <a href="/admin" class="btn btn-outline">Admin Panel</a>
+        <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">🌙</button>
+      </div>
     </header>
+
     <main>
-      <section>
-        <h2>Registered Bots</h2>
-        <div id="bot-list"></div>
-      </section>
-      <section>
-        <h2>Run Quick Match</h2>
-        <div class="grid">
-          <label>
-            White Bot
-            <select id="white-select"></select>
-          </label>
-          <label>
-            Black Bot
-            <select id="black-select"></select>
-          </label>
-        </div>
-        <button id="run-match">Run Match</button>
-        <div id="match-result"></div>
-      </section>
-      <section>
-        <h2>Leaderboard</h2>
-        <div id="leaderboard"></div>
-      </section>
+      <!-- Navigation Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="dashboard">📊 Dashboard</button>
+        <button class="tab-btn" data-tab="tournaments">🏆 Tournaments</button>
+        <button class="tab-btn" data-tab="matches">⚔ Matches</button>
+        <button class="tab-btn" data-tab="bots">🤖 Bots</button>
+      </div>
+
+      <!-- DASHBOARD TAB -->
+      <div id="dashboard-tab" class="tab-content active">
+        <!-- Stats Overview -->
+        <section>
+          <h2>📈 Quick Stats</h2>
+          <div class="grid-4">
+            <div class="card">
+              <div class="card-header">Total Matches</div>
+              <div class="card-body" style="font-size: 28px; font-weight: bold; color: var(--color-primary);">
+                <span id="stats-matches">0</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">Active Bots</div>
+              <div class="card-body" style="font-size: 28px; font-weight: bold; color: var(--color-secondary);">
+                <span id="stats-bots">0</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">Tournaments</div>
+              <div class="card-body" style="font-size: 28px; font-weight: bold; color: var(--color-success);">
+                <span id="stats-tournaments">0</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">Avg Game Length</div>
+              <div class="card-body" style="font-size: 28px; font-weight: bold; color: var(--color-info);">
+                <span id="stats-avg-moves">0</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Leaderboard -->
+        <section>
+          <h2>🏅 Global Leaderboard</h2>
+          <div style="overflow-x: auto;">
+            <table id="leaderboard-table">
+              <thead>
+                <tr>
+                  <th style="width: 40px;">Rank</th>
+                  <th>Bot Name</th>
+                  <th style="text-align: center;">Wins</th>
+                  <th style="text-align: center;">Losses</th>
+                  <th style="text-align: center;">Draws</th>
+                  <th style="text-align: center;">Points</th>
+                  <th style="text-align: center;">Win Rate</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard">
+                <tr class="text-center">
+                  <td colspan="7">Loading leaderboard...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Recent Matches -->
+        <section>
+          <h2>⚡ Recent Matches</h2>
+          <div id="recent-matches" class="grid-2" style="min-height: 200px;">
+            <div class="text-center">Loading recent matches...</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- TOURNAMENTS TAB -->
+      <div id="tournaments-tab" class="tab-content">
+        <section>
+          <div class="flex-between mb-lg">
+            <h2>🏆 Tournaments</h2>
+            <button class="btn btn-primary" id="create-tournament-btn">+ New Tournament</button>
+          </div>
+          
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="tournament-search" placeholder="Search tournaments...">
+          </div>
+
+          <div id="tournaments-list" class="grid">
+            <div class="text-center" style="grid-column: 1/-1;">Loading tournaments...</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- MATCHES TAB -->
+      <div id="matches-tab" class="tab-content">
+        <section>
+          <h2>⚔ Match History</h2>
+          
+          <div class="filter-bar">
+            <input type="text" id="match-search" placeholder="Search matches...">
+            <select id="match-filter-result">
+              <option value="">All Results</option>
+              <option value="white">White Wins</option>
+              <option value="black">Black Wins</option>
+              <option value="draw">Draws</option>
+              <option value="forfeit">Forfeits</option>
+            </select>
+          </div>
+
+          <div id="matches-list" class="grid-2" style="min-height: 200px;">
+            <div class="text-center" style="grid-column: 1/-1;">Loading matches...</div>
+          </div>
+
+          <div class="pagination" id="matches-pagination"></div>
+        </section>
+      </div>
+
+      <!-- BOTS TAB -->
+      <div id="bots-tab" class="tab-content">
+        <section>
+          <div class="flex-between mb-lg">
+            <h2>🤖 Bot Management</h2>
+            <button class="btn btn-primary" id="register-bot-btn">+ Register Bot</button>
+          </div>
+
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="bot-search" placeholder="Search bots...">
+          </div>
+
+          <div id="bots-list" class="grid-2" style="min-height: 200px;">
+            <div class="text-center" style="grid-column: 1/-1;">Loading bots...</div>
+          </div>
+        </section>
+      </div>
     </main>
+
+    <!-- Register Bot Modal -->
+    <div id="register-bot-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>🤖 Register New Bot</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="register-bot-form">
+          <div class="form-group">
+            <label for="bot-name">Bot Name</label>
+            <input type="text" id="bot-name" required placeholder="e.g., RandomBot">
+          </div>
+          <div class="form-group">
+            <label for="bot-command">Command</label>
+            <input type="text" id="bot-command" required placeholder="e.g., python bots/random_bot.py">
+            <small class="text-muted mt-sm" style="display: block;">Command to execute the bot (space-separated arguments)</small>
+          </div>
+          <div class="flex gap-md">
+            <button type="submit" class="btn btn-primary btn-full">Register Bot</button>
+            <button type="button" class="btn btn-outline btn-full modal-cancel">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Create Tournament Modal -->
+    <div id="create-tournament-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>🏆 Create Tournament</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="create-tournament-form">
+          <div class="form-group">
+            <label for="tournament-name">Tournament Name</label>
+            <input type="text" id="tournament-name" required placeholder="e.g., Spring Championship">
+          </div>
+          <div class="form-group">
+            <label for="tournament-bots">Select Bots (at least 2)</label>
+            <div id="tournament-bots-list" style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: var(--spacing-sm);">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tournament-rounds">Rounds</label>
+              <input type="number" id="tournament-rounds" min="1" max="10" value="2" required>
+            </div>
+            <div class="form-group">
+              <label for="tournament-timeout">Move Timeout (s)</label>
+              <input type="number" id="tournament-timeout" min="0.1" max="30" step="0.1" value="2" required>
+            </div>
+          </div>
+          <div class="flex gap-md">
+            <button type="submit" class="btn btn-primary btn-full">Create Tournament</button>
+            <button type="button" class="btn btn-outline btn-full modal-cancel">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Quick Match Modal -->
+    <div id="quick-match-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>⚡ Run Quick Match</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="quick-match-form">
+          <div class="form-group">
+            <label for="quick-match-white">White Bot</label>
+            <select id="quick-match-white" required></select>
+          </div>
+          <div class="form-group">
+            <label for="quick-match-black">Black Bot</label>
+            <select id="quick-match-black" required></select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="quick-match-timeout">Move Timeout (s)</label>
+              <input type="number" id="quick-match-timeout" min="0.1" max="30" step="0.1" value="2" required>
+            </div>
+            <div class="form-group">
+              <label for="quick-match-maxmoves">Max Moves</label>
+              <input type="number" id="quick-match-maxmoves" min="10" max="500" value="200" required>
+            </div>
+          </div>
+          <div class="flex gap-md">
+            <button type="submit" class="btn btn-primary btn-full" id="quick-match-submit">Run Match</button>
+            <button type="button" class="btn btn-outline btn-full modal-cancel">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/static/js/utils.js"></script>
     <script src="/static/js/app.js"></script>
   </body>
 </html>

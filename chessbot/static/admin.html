@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Chess Bot Platform</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <h1>⚙ Admin Panel</h1>
+        <p>Manage bots, tournaments, and system settings</p>
+      </div>
+      <div class="header-controls">
+        <a href="/" class="btn btn-outline">← Dashboard</a>
+        <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">🌙</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Navigation Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="overview">📊 Overview</button>
+        <button class="tab-btn" data-tab="bots">🤖 Bot Management</button>
+        <button class="tab-btn" data-tab="matches">⚔ Matches</button>
+        <button class="tab-btn" data-tab="tournaments">🏆 Tournaments</button>
+        <button class="tab-btn" data-tab="settings">⚙ Settings</button>
+      </div>
+
+      <!-- OVERVIEW TAB -->
+      <div id="overview-tab" class="tab-content active">
+        <section>
+          <h2>🎯 System Overview</h2>
+          <div class="grid-4">
+            <div class="card">
+              <div class="card-header">Total Bots</div>
+              <div class="card-body" style="font-size: 32px; font-weight: bold; color: #2563eb;" id="admin-total-bots">0</div>
+            </div>
+            <div class="card">
+              <div class="card-header">Total Matches</div>
+              <div class="card-body" style="font-size: 32px; font-weight: bold; color: #16a34a;" id="admin-total-matches">0</div>
+            </div>
+            <div class="card">
+              <div class="card-header">Active Tournaments</div>
+              <div class="card-body" style="font-size: 32px; font-weight: bold; color: #d97706;" id="admin-active-tournaments">0</div>
+            </div>
+            <div class="card">
+              <div class="card-header">Avg Moves/Game</div>
+              <div class="card-body" style="font-size: 32px; font-weight: bold; color: #0891b2;" id="admin-avg-moves">—</div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>📈 Recent Activity</h2>
+          <div id="admin-activity-log" style="max-height: 400px; overflow-y: auto;">
+            <p class="text-center text-muted">Loading activity...</p>
+          </div>
+        </section>
+
+        <section>
+          <h2>⚠ System Health</h2>
+          <div id="admin-health-status">
+            <div class="alert alert-info">
+              <strong>API Status:</strong> <span id="api-status" class="badge badge-success">Operational</span>
+            </div>
+            <div class="alert alert-info">
+              <strong>Storage:</strong> <span id="storage-status" class="badge badge-success">Healthy</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- BOTS MANAGEMENT TAB -->
+      <div id="bots-tab" class="tab-content">
+        <section>
+          <div class="flex-between mb-lg">
+            <h2>🤖 Bot Management</h2>
+            <button class="btn btn-primary" id="admin-register-bot">+ Register New Bot</button>
+          </div>
+
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="admin-bot-search" placeholder="Search bots...">
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table id="admin-bots-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Command</th>
+                  <th>Created</th>
+                  <th>Stats</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-bots-list">
+                <tr class="text-center">
+                  <td colspan="5">Loading bots...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- MATCHES TAB -->
+      <div id="matches-tab" class="tab-content">
+        <section>
+          <h2>⚔ Match Management</h2>
+
+          <div class="filter-bar">
+            <input type="text" id="admin-match-search" placeholder="Search matches...">
+            <select id="admin-match-status">
+              <option value="">All Status</option>
+              <option value="completed">Completed</option>
+              <option value="ongoing">Ongoing</option>
+            </select>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table id="admin-matches-table">
+              <thead>
+                <tr>
+                  <th>White</th>
+                  <th>Black</th>
+                  <th>Result</th>
+                  <th>Moves</th>
+                  <th>Duration</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-matches-list">
+                <tr class="text-center">
+                  <td colspan="7">Loading matches...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- TOURNAMENTS TAB -->
+      <div id="tournaments-tab" class="tab-content">
+        <section>
+          <div class="flex-between mb-lg">
+            <h2>🏆 Tournament Management</h2>
+            <button class="btn btn-primary" id="admin-create-tournament">+ Create Tournament</button>
+          </div>
+
+          <div id="admin-tournaments-list" class="grid">
+            <div class="text-center" style="grid-column: 1/-1;">Loading tournaments...</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div id="settings-tab" class="tab-content">
+        <section>
+          <h2>⚙ System Settings</h2>
+
+          <div class="form-group">
+            <label for="admin-timeout-setting">Default Move Timeout (seconds)</label>
+            <input type="number" id="admin-timeout-setting" min="0.1" max="30" step="0.1" value="2">
+          </div>
+
+          <div class="form-group">
+            <label for="admin-max-moves-setting">Default Max Moves Per Game</label>
+            <input type="number" id="admin-max-moves-setting" min="10" max="500" value="200">
+          </div>
+
+          <div class="form-group">
+            <label for="admin-poll-interval">Dashboard Refresh Interval (ms)</label>
+            <input type="number" id="admin-poll-interval" min="1000" max="60000" step="1000" value="5000">
+          </div>
+
+          <button class="btn btn-primary" onclick="saveAdminSettings()">Save Settings</button>
+        </section>
+
+        <section>
+          <h2>📋 Maintenance</h2>
+          
+          <div class="grid-2">
+            <div>
+              <h3>Clear Data</h3>
+              <p class="text-muted text-small">Warning: This action cannot be undone.</p>
+              <div class="flex gap-md" style="margin-top: var(--spacing-md);">
+                <button class="btn btn-danger btn-small" onclick="clearMatchHistory()">Clear Matches</button>
+                <button class="btn btn-danger btn-small" onclick="clearAllData()">Clear All Data</button>
+              </div>
+            </div>
+            <div>
+              <h3>Diagnostics</h3>
+              <p class="text-muted text-small">Run diagnostic checks on the system.</p>
+              <button class="btn btn-outline btn-small mt-md" onclick="runDiagnostics()">Run Diagnostics</button>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>📝 Logs</h2>
+          <div id="admin-logs" style="background: var(--bg-secondary); padding: var(--spacing-md); border-radius: var(--radius-md); font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; color: var(--text-secondary);">
+            <p>[INFO] Admin panel initialized</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Bot Registration Modal (reuse from dashboard) -->
+    <div id="admin-register-bot-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>🤖 Register New Bot</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="admin-register-bot-form">
+          <div class="form-group">
+            <label for="admin-bot-name">Bot Name</label>
+            <input type="text" id="admin-bot-name" required placeholder="e.g., GreedyBot">
+          </div>
+          <div class="form-group">
+            <label for="admin-bot-command">Command</label>
+            <input type="text" id="admin-bot-command" required placeholder="e.g., python bots/greedy_bot.py">
+            <small class="text-muted mt-sm" style="display: block;">Full command path with arguments</small>
+          </div>
+          <div class="flex gap-md">
+            <button type="submit" class="btn btn-primary btn-full">Register</button>
+            <button type="button" class="btn btn-outline btn-full modal-cancel">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/admin.js"></script>
+  </body>
+</html>
